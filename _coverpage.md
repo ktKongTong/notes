@@ -1,9 +1,11 @@
 <!-- _coverpage.md -->
+![logo](_media/logo.svg) 
 
-# docsify <small>3.5</small>
+# kt's Notes <small>2020</small>
 
-[GitHub](https://github.com/notes/)
-[Get Started](README.md)
+
+
+[Read it!](#笔记记录)
 
 <!-- 背景图片 -->
 

@@ -1,0 +1,3 @@
+- [Home](/)
+- [Blog](https://lei-blog.xyz)
+- [语雀](https://www.yuque.com/kongtongkt)
