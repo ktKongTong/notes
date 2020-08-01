@@ -1,1 +1,2 @@
 - [test](docs/test/_sidebar.md)
+- [leetcode](docs/leetcode/_sidebar.md)
