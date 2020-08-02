@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>每日一句</title>
+    <title>每日一图</title>
     <style>
         div,
         ul,
@@ -147,9 +147,6 @@
             <div class="detail-banner">
                 <img alt="" class="detail-banner-img" :src="bing_daily">
             </div>
-            <div class="detail-content">
-                <!-- <div class="detail-content-zh">{{daily.note}}</div> -->
-            </div>
         </div>
     </div>
     <script crossorigin="anonymous" integrity="sha384-OZmxTjkv7EQo5XDMPAmIkkvywVeXw59YyYh6zq8UKfkbor13jS+5p8qMTBSA1q+F"
@@ -163,8 +160,9 @@
             el: '#detail',
             data: {
                 bing_daily: null,
-                str:null,
+                LeetcodeData:null,
                 daily: null,
+                todayLeetCode:null,
                 month: 12
             },
             computed: {
@@ -199,6 +197,39 @@
                     })
                     
                 },
+                //获取当日题目slug以及题号
+                getDailyLeetCodeData() {
+                    var that=this;
+                    let postdata={"operationName":"questionOfToday",
+                        "variables":{},
+                        "query":"query questionOfToday {\n  todayRecord {\n    question {\n      questionFrontendId\n      questionTitleSlug\n      }\n   date\n  }\n}\n"
+                        }
+                    axios.post("https://leetcode-cn.com/graphql",postdata,{
+                        withwithCredentials:true
+                    }).then(function(response) {
+                        Slug=response.data.data.todayRecord[0].question.questionTitleSlug;
+                        that.getLeetCodeDataBySlug(Slug);
+                    })
+                },
+                //获取当日题目详情
+                getLeetCodeDataBySlug(Slug) {
+                    var that=this;
+                    let postdata={
+                        "operationName":"questionData",
+                        "variables":{"titleSlug":Slug},
+                        "query":"query questionData($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    questionId\n    questionFrontendId\n    boundTopicId\n    title\n    titleSlug\n    content\n    translatedTitle\n    translatedContent\n    difficulty\n     topicTags {\n      name\n      slug\n      translatedName\n   }\n     codeSnippets {\n      lang\n      langSlug\n      code\n   }\n    stats\n      }\n}\n"
+                    }
+                    axios.post("https://leetcode-cn.com/graphql",postdata,{
+                        header:{
+                            "Cookie":"csrftoken=kuMviUEFlO5nr54j46DZCTKMyE6dyrPBHjzuR5Hj6dbh3jcH4LCKFFPMGNg0b3oA;"
+                        }
+                    }
+                    ,{
+                        withwithCredentials:true
+                    }).then(function(response) {
+                        that.todayLeetCode=response.data.data.question;
+                    })
+                },
                 // 获取爱词霸相关接口数据
                 getData(title) {
                     fetchJsonp('https://sentence.iciba.com/index.php?c=dailysentence&m=getdetail&title=' + title).then(res => {
@@ -215,6 +246,7 @@
             },
             created() {
                 this.getData(this.today);
+                this.getDailyLeetCodeData();
             },
             mounted(){
             }
