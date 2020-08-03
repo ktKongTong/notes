@@ -138,8 +138,8 @@
                             @click='getPicData(info.date)'>{{info.week}}</a>
                         <a v-else-if="info.flag=='cur'" class="detail-title-week-item-top on"
                             href="javascript:void(0)">{{info.week}}</a>
-                        <a v-else class="detail-title-week-item-top detail-disable"
-                            href="javascript:void(0)">{{info.week}}</a>
+                        <!-- <a v-else class="detail-title-week-item-top detail-disable"
+                            href="javascript:void(0)">{{info.week}}</a> -->
                         <span class="detail-title-week-item-bottom">{{handleDay(info.date)}}</span>
                     </li>
                 </ul>
