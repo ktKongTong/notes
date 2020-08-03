@@ -129,25 +129,7 @@
 
 <body>
     <div class="detail" id="detail">
-        <div class="detail-box" v-if="daily">
-            <div class="detail-title">
-                <div class="detail-title-month">{{month}}月</div>
-                <ul class="detail-title-week">
-                    <li class="detail-title-week-item" v-for="info in daily.week_info">
-                        <a v-if="info.flag=='show'" class="detail-title-week-item-top" href="javascript:void(0)"
-                            @click='getPicData(info.date)'>{{info.week}}</a>
-                        <a v-else-if="info.flag=='cur'" class="detail-title-week-item-top on"
-                            href="javascript:void(0)">{{info.week}}</a>
-                        <a v-else class="detail-title-week-item-top detail-disable"
-                            href="javascript:void(0)">{{info.week}}</a>
-                        <span class="detail-title-week-item-bottom">{{handleDay(info.date)}}</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="detail-banner">
-                <img alt="" class="detail-banner-img" :src="bing_daily">
-            </div>
-        </div>
+        test
     </div>
     <script crossorigin="anonymous" integrity="sha384-OZmxTjkv7EQo5XDMPAmIkkvywVeXw59YyYh6zq8UKfkbor13jS+5p8qMTBSA1q+F"
         src="https://lib.baomitu.com/vue/2.6.11/vue.min.js"></script>
@@ -184,26 +166,37 @@
                     var result = parseInt(diff / (1000 * 60 * 60 * 24));
                     return result
                 },
-                // 获取bing每日壁纸
-                getPicData(today) {
+                //获取当日题目slug以及题号
+                getDailyLeetCodeData() {
                     var that=this;
-                    diff = this.dateDiff(new Date(),today);
-                    console.log(diff);
-                    axios.get("https://www.bing.com/HPImageArchive.aspx?format=js&n=1&idx="+diff,{
+                    let postdata={"operationName":"questionOfToday",
+                        "variables":{},
+                        "query":"query questionOfToday {\n  todayRecord {\n    question {\n      questionFrontendId\n      questionTitleSlug\n      }\n   date\n  }\n}\n"
+                        }
+                    axios.post("https://leetcode-cn.com/graphql",postdata,{
                         withwithCredentials:true
                     }).then(function(response) {
-                        str="https://www.bing.com"+response.data.images[0].url;
-                        that.bing_daily=str.split("&")[0];
+                        Slug=response.data.data.todayRecord[0].question.questionTitleSlug;
+                        that.getLeetCodeDataBySlug(Slug);
                     })
-                    
                 },
-                // 获取爱词霸相关接口数据
-                getData(title) {
-                    fetchJsonp('https://sentence.iciba.com/index.php?c=dailysentence&m=getdetail&title=' + title).then(res => {
-                        return res.json();
-                    }).then(data => {
-                        this.daily = data;
-                        this.getPicData(title);
+                //获取当日题目详情
+                getLeetCodeDataBySlug(Slug) {
+                    var that=this;
+                    let postdata={
+                        "operationName":"questionData",
+                        "variables":{"titleSlug":Slug},
+                        "query":"query questionData($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    questionId\n    questionFrontendId\n    boundTopicId\n    title\n    titleSlug\n    content\n    translatedTitle\n    translatedContent\n    difficulty\n     topicTags {\n      name\n      slug\n      translatedName\n   }\n     codeSnippets {\n      lang\n      langSlug\n      code\n   }\n    stats\n      }\n}\n"
+                    }
+                    axios.post("https://leetcode-cn.com/graphql",postdata,{
+                        header:{
+                            "Cookie":"csrftoken=kuMviUEFlO5nr54j46DZCTKMyE6dyrPBHjzuR5Hj6dbh3jcH4LCKFFPMGNg0b3oA;"
+                        }
+                    }
+                    ,{
+                        withwithCredentials:true
+                    }).then(function(response) {
+                        that.todayLeetCode=response.data.data.question;
                     })
                 },
                 handleDay(date) {
@@ -212,7 +205,8 @@
                 }
             },
             created() {
-                this.getData(this.today);
+                // this.getData(this.today);
+                // this.getDailyLeetCodeData();
             },
             mounted(){
             }
