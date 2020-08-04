@@ -135,10 +135,10 @@
                 <ul class="detail-title-week">
                     <li class="detail-title-week-item" v-for="info in daily.week_info">
                         <a v-if="info.flag=='show'" class="detail-title-week-item-top" href="javascript:void(0)"
-                            @click='getPicData(info.date)'>{{info.week}}</a>
+                            @click='getData(info.date)'>{{info.week}}</a>
                         <a v-else-if="info.flag=='cur'" class="detail-title-week-item-top on"
                             href="javascript:void(0)">{{info.week}}</a>
-                        <a v-else class="detail-title-week-item-top" href="javascript:void(0)" @click='getPicData(info.date)'>{{info.week}}</a>
+                        <a v-else class="detail-title-week-item-top detail-disable href="javascript:void(0)">{{info.week}}</a>
                         <span class="detail-title-week-item-bottom">{{handleDay(info.date)}}</span>
                     </li>
                 </ul>
