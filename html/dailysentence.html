@@ -145,7 +145,7 @@
                 </ul>
             </div>
             <div class="detail-banner">
-                <img alt="" class="detail-banner-img" :src="bing_daily">
+                <img alt=""  class="detail-banner-img" :src="bing_daily"/>
             </div>
         </div>
     </div>
@@ -188,8 +188,7 @@
                 getPicData(today) {
                     var that=this;
                     diff = this.dateDiff(new Date(),today);
-                    console.log(diff);
-                    axios.get("https://www.bing.com/HPImageArchive.aspx?format=js&n=1&idx="+diff,{
+                    axios.get("http://api.lei-blog.xyz/bing?idx"+diff,{
                         withwithCredentials:true
                     }).then(function(response) {
                         str="https://www.bing.com"+response.data.images[0].url;
