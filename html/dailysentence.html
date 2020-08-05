@@ -188,7 +188,7 @@
                 getPicData(today) {
                     var that=this;
                     diff = this.dateDiff(new Date(),today);
-                    axios.get("http://api.lei-blog.xyz/bing?idx"+diff,{
+                    axios.get("https://api.lei-blog.xyz/bing?idx="+diff,{
                         withwithCredentials:true
                     }).then(function(response) {
                         str="https://www.bing.com"+response.data.images[0].url;
