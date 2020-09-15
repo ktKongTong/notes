@@ -135,7 +135,7 @@
                 <ul class="detail-title-week">
                     <li class="detail-title-week-item" v-for="info in daily.week_info">
                         <a v-if="info.flag=='show'" class="detail-title-week-item-top" href="javascript:void(0)"
-                            @click='getData(info.date)'>{{info.week}}</a>
+                            @click='switchDay(info)'>{{info.week}}</a>
                         <a v-else-if="info.flag=='cur'" class="detail-title-week-item-top on"
                             href="javascript:void(0)">{{info.week}}</a>
                         <a v-else class="detail-title-week-item-top detail-disable"
@@ -202,16 +202,26 @@
                         return res.json();
                     }).then(data => {
                         this.daily = data;
-                        this.getPicData(title);
+                        
                     })
                 },
                 handleDay(date) {
                     let day = date.split('-')[2];
                     return day[0] == '0' ? day[1] : day;
+                },
+                switchDay(info){
+                    for(let i=0;i<this.daily.week_info.length;i++){
+                        if(this.daily.week_info[i].flag== "cur"){
+                            this.daily.week_info[i].flag = "show";
+                        }
+                    }
+                    info.flag="cur"
+                    this.getPicData(info.date);
                 }
             },
             created() {
                 this.getData(this.today);
+                this.getPicData(this.today);
             },
             mounted(){
             }
