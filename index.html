@@ -21,6 +21,55 @@
     .sidebar .sidebar-nav{
       margin-left: 30px;
     }
+    .sidebar-nav li {
+      position: relative;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .app-sub-sidebar li:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 11px;
+      left: -12px;
+      height: 6px;
+      width: 6px;
+      padding-right: 0px;
+      border-right: 1px solid #505d6b;
+      border-bottom: 1px solid #505d6b;
+      transform: rotate(-45deg);
+      transition: transform 0.3s;
+    }
+    .app-sub-sidebar li.active::before{
+      transform: rotate(45deg);
+    }
+    .app-sub-sidebar li.collapse::before {
+      transform: rotate(-45deg);
+    }
+    .sidebar ul li a:hover{
+      text-decoration: none;
+    }
+    .sidebar-nav>ul>li.active::before{
+      transform: rotate(45deg);
+    }
+    .sidebar-nav>ul>li.collapse::before{
+      transform: rotate(-45deg);
+    }
+    .sidebar-nav>ul>li::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 11px;
+      left: -12px;
+      height: 6px;
+      width: 6px;
+      padding-right: 0px;
+      border-right: 1px solid #505d6b;
+      border-bottom: 1px solid #505d6b;
+      transform: rotate(-45deg);
+      transition: transform 0.3s;
+    }
   </style>
   <script>
     window.$docsify = {
@@ -32,16 +81,29 @@
       loadSidebar: true,
       loadNavbar: true,
       auto2top: true,
-      subMaxLevel: 6,
-      executeScript: true
+      subMaxLevel: 4,
+      executeScript: true,
+      
     }
   </script>
 
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/prism.js"></script>
+<script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+<!-- 公式 -->
 <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+<!-- 表情 -->
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+
 <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+<!-- 代码高亮 -->
+
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cmake.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
 </body>
 </html>

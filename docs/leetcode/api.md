@@ -1,20 +1,23 @@
-# 每月每日一题接口
+## 每月每日一题接口
 
-#### 请求url
+##### 请求url
     https://leetcode-cn.com/graphql
-#### 请求方式
+##### 请求方式
     POST
-#### 请求头
+##### 请求头
     cookie需要LEETCODE_SESSION
-#### 请求体
+##### 请求体
 ```json
 {
     "operationName":"dailyQuestionRecords",
-    "variables":{"year":2020,"month":8},
+    "variables":{
+      "year":2020,
+      "month":8
+    },
     "query":"query dailyQuestionRecords($year: Int!, $month: Int!) {\n  dailyQuestionRecords(year: $year, month: $month) {\n    date\n    question {\n      questionId\n      questionFrontendId\n      questionTitle\n      questionTitleSlug\n      translatedTitle\n      __typename\n    }\n    userStatus\n    __typename\n  }\n}\n"
 }
 ```
-#### 返回数据
+##### 返回数据
 
 ```json
 {
@@ -51,25 +54,27 @@
 }
 ```
 
-# 根据题名获取题目信息接口
+## 根据题名获取题目信息接口
 
 
-#### 请求url
+##### 请求url
     https://leetcode-cn.com/graphql
-#### 请求方式
+##### 请求方式
     POST
-#### 请求头
+##### 请求头
     cookie需要csrftoken
     csrftoken=kuMviUEFlO5nr54j46DZCTKMyE6dyrPBHjzuR5Hj6dbh3jcH4LCKFFPMGNg0b3oA;
-#### 请求体
+##### 请求体
 ```json
 {
     "operationName":"questionData",
-    "variables":{"titleSlug":"add-two-numbers"},
+    "variables":{
+      "titleSlug":"add-two-numbers"
+      },
     "query":"query questionData($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    questionId\n    questionFrontendId\n    boundTopicId\n    title\n    titleSlug\n    content\n    translatedTitle\n    translatedContent\n    difficulty\n     topicTags {\n      name\n      slug\n      translatedName\n   }\n     codeSnippets {\n      lang\n      langSlug\n      code\n   }\n    stats\n      }\n}\n"
 }
 ```
-#### 返回数据
+##### 返回数据
 ```json
 {
     "data": {
@@ -179,35 +184,36 @@
 ```
 
 
-# 每日一题接口
+## 每日一题接口
 
-#### 请求url
+##### 请求url
     https://leetcode-cn.com/graphql
-#### 请求方式
+##### 请求方式
     POST
-#### 请求头
+##### 请求头
     无需额外数据
-#### 请求体
+##### 请求体
 ```json
-{"operationName":"questionOfToday",
-"variables":{},
-"query":"query questionOfToday {\n  todayRecord {\n    question {\n      questionFrontendId\n      questionTitleSlug\n      }\n   date\n  }\n}\n"
+{
+  "operationName":"questionOfToday",
+  "variables":{},
+  "query":"query questionOfToday {\n  todayRecord {\n    question {\n      questionFrontendId\n      questionTitleSlug\n      }\n   date\n  }\n}\n"
 }
 ```
-#### 返回数据
+##### 返回数据
 
 ```json
 {
-    "data": {
-        "todayRecord": [
-            {
-                "question": {
-                    "questionFrontendId": "114",
-                    "questionTitleSlug": "flatten-binary-tree-to-linked-list"
-                },
-                "date": "2020-08-02"
-            }
-        ]
-    }
+  "data": {
+    "todayRecord": [
+      {
+        "question": {
+          "questionFrontendId": "114",
+          "questionTitleSlug": "flatten-binary-tree-to-linked-list"
+        },
+        "date": "2020-08-02"
+      }
+    ]
+  }
 }
 ```
