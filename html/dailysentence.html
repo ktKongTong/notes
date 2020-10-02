@@ -129,18 +129,18 @@
 
 <body>
     <div class="detail" id="detail">
-        <div class="detail-box" v-if="daily">
+        <div class="detail-box">
             <div class="detail-title">
                 <div class="detail-title-month">{{month}}月</div>
                 <ul class="detail-title-week">
-                    <li class="detail-title-week-item" v-for="info in daily.week_info">
+                    <li class="detail-title-week-item" v-for="info in weekArray">
                         <a v-if="info.flag=='show'" class="detail-title-week-item-top" href="javascript:void(0)"
-                            @click='switchDay(info)'>{{info.week}}</a>
+                            @click='switchDay(info)'>{{info.day}}</a>
                         <a v-else-if="info.flag=='cur'" class="detail-title-week-item-top on"
-                            href="javascript:void(0)">{{info.week}}</a>
+                            href="javascript:void(0)">{{info.day}}</a>
                         <a v-else class="detail-title-week-item-top detail-disable"
-                            href="javascript:void(0)">{{info.week}}</a>
-                        <span class="detail-title-week-item-bottom">{{handleDay(info.date)}}</span>
+                            href="javascript:void(0)">{{info.day}}</a>
+                        <span class="detail-title-week-item-bottom">{{info.date}}</span>
                     </li>
                 </ul>
             </div>
@@ -160,10 +160,13 @@
             el: '#detail',
             data: {
                 bing_daily: null,
-                LeetcodeData:null,
-                daily: null,
-                todayLeetCode:null,
-                month: 12
+                month: 12,
+                res:null,
+                weekArray:[{
+                    day:2,
+                    date:2,
+                    flag:"show"
+                }]
             },
             computed: {
                 today() {
@@ -176,52 +179,84 @@
                 }
             },
             methods: {
-                // 计算天数差别
-                dateDiff(firstDate,secondDate){
-                    var firstDate = new Date(firstDate);
-                    var secondDate = new Date(secondDate);
-                    var diff = Math.abs(firstDate.getTime() - secondDate.getTime())
-                    var result = parseInt(diff / (1000 * 60 * 60 * 24));
-                    return result
-                },
-                // 获取bing每日壁纸
-                getPicData(today) {
-                    var that=this;
-                    diff = this.dateDiff(new Date(),today);
-                    axios.get("https://api-blog.ktnote.cn/bingWallpaper?idx="+diff,{
-                        withwithCredentials:true
-                    }).then(function(response) {
-                        str="https://www.bing.com"+response.data.images[0].url;
-                        that.bing_daily=str.split("&")[0];
-                    })
-                    
-                },
-                // 获取爱词霸相关接口数据
-                getData(title) {
-                    fetchJsonp('https://sentence.iciba.com/index.php?c=dailysentence&m=getdetail&title=' + title).then(res => {
-                        return res.json();
-                    }).then(data => {
-                        this.daily = data;
-                        
-                    })
-                },
-                handleDay(date) {
-                    let day = date.split('-')[2];
-                    return day[0] == '0' ? day[1] : day;
-                },
+                
                 switchDay(info){
-                    for(let i=0;i<this.daily.week_info.length;i++){
-                        if(this.daily.week_info[i].flag== "cur"){
-                            this.daily.week_info[i].flag = "show";
+                    for(let i=0;i<this.weekArray.length;i++){
+                        if(this.weekArray[i].flag== "cur"){
+                            this.weekArray[i].flag = "show";
                         }
                     }
                     info.flag="cur"
-                    this.getPicData(info.date);
+                    this.bing_daily = info.img
+                },
+                getPicData(n){
+                    var that = this
+                    
+                    var xhr = new XMLHttpRequest();
+                    function state_Change(){
+                        if (xhr.readyState==4)
+                            {// 4 = "loaded"
+                            if (xhr.status==200)
+                                {
+                                    var data = xhr.responseText;
+                                    var imgs = JSON.parse(data).images;
+                                    var res =[]
+                                    for(let i = 0; i <n;i++){
+                                        str="https://www.bing.com"+imgs[i].url;
+                                        let url=str.split("&")[0];
+                                        res.push(url)
+                                        that.res = res
+                                    }
+                                }
+                            else{
+                                    alert("Problem retrieving XML data");
+                                }
+                            }
+                        }
+                    xhr.onreadystatechange=state_Change
+                    xhr.open("GET","https://api-blog.ktnote.cn/bingWallpaper?idx=0&n="+n,false);
+                    xhr.send(null);
+                },
+                getWeekDate() {
+                    //获取今天的日期
+                    var today = new Date();
+                    this.month = today.getMonth()+1;
+                    var n = today.getDay();
+                    if(n==0){
+                        n = 7;
+                    }
+                    this.getPicData(n)
+                    var picArray = this.res.reverse();
+                    var weekArray=[]
+                    var weeks = new Array("Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat.", "Sun.");
+                    for(let i=1;i<=n;i++){
+                        var tempDate = new Date();
+                        let dayInfo = {}
+                        dayInfo.flag = "show"
+                        if(i==n){
+                            dayInfo.flag = "cur"
+                        }
+                        dayInfo.img = picArray[i-1]
+                        dayInfo.day = weeks[i-1]
+                        tempDate.setTime(today.getTime()-24*60*60*1000*(n-i))
+                        dayInfo.date = tempDate.getDate();
+                        weekArray.push(dayInfo)
+                    }
+                    for(let i=n+1;i<=7;i++){
+                        let tempDate = new Date();
+                        let dayInfo = {}
+                        dayInfo.flag = "disable"
+                        dayInfo.day = weeks[i-1]
+                        tempDate.setTime(today.getTime()+24*60*60*1000*(i-n));
+                        dayInfo.date = tempDate.getDate();
+                        weekArray.push(dayInfo)
+                    }
+                    this.weekArray = weekArray;
+                    this.bing_daily = weekArray[n-1].img
                 }
             },
             created() {
-                this.getData(this.today);
-                this.getPicData(this.today);
+                this.getWeekDate();
             },
             mounted(){
             }

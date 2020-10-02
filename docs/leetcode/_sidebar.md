@@ -1,2 +1,3 @@
  - [27.移除元素](docs/leetcode/27.移除元素.md)
  - [每日一题api](docs/leetcode/api.md)
+ - [上一级](/?id=每日一图)
