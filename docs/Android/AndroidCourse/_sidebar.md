@@ -1,2 +1,3 @@
 - [WechatDemo](docs/Android/AndroidCourse/WechatDemo.md)
+- [recyclerViewInWhchatDemo](docs/Android/AndroidCourse/recyclerViewInWhchatDemo.md)
 - [上一级](docs/Android/README.md)
