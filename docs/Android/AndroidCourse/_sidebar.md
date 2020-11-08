@@ -1,3 +1,4 @@
 - [WechatDemo](docs/Android/AndroidCourse/WechatDemo.md)
 - [recyclerViewInWhchatDemo](docs/Android/AndroidCourse/recyclerViewInWhchatDemo.md)
+- [MusicPlayer](docs/Android/AndroidCourse/MusicPlayer.md)
 - [上一级](docs/Android/README.md)
