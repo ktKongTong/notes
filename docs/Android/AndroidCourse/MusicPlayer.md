@@ -499,5 +499,5 @@ public void onItemClick(View view, int pos) {
 ```
 > #### **运行界面展示**
 
-[结果.mp4]()<br>
+[结果.mp4](https://cdn.jsdelivr.net/gh/ktKongTong/notes/docs/Android/AndroidCourse/pic/MusicPlayer/result.mp4)<br>
 ![show](./pic/MusicPlayer/result.gif ':size=20%')
