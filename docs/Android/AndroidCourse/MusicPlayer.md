@@ -250,7 +250,7 @@ public class Music implements Parcelable {
 效果如下<br>
 ![bottomPlayer](./pic/MusicPlayer/bottomPlayer.jpg ':size=40%')
 
-##### 5.音乐服务于MainActivity的交互方式
+##### 5.音乐服务与MainActivity的交互方式
 
 ![交互方式](./pic/MusicPlayer/交互.jpg ':size=100%')
 
